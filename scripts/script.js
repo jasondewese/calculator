@@ -23,6 +23,8 @@ let current = '';
 let previous = '';
 let currentOperator = '';
 
+//used in rounding function
+const LIMIT_5_DECIMALS = 100000;
 
 //Value to show on screen
 let displayValue = '';
@@ -41,6 +43,23 @@ for (let i = 0; i < numberBtns.length; i++){
 //Math Operation event handlers
 //******************************************************** */
 plusBtn.addEventListener('click', function(){
+   plusEvent();
+});
+
+minusBtn.addEventListener('click', function(){
+    subtractEvent();
+});
+
+timesBtn.addEventListener('click', function(){
+    multiplyEvent();
+});
+
+divideBtn.addEventListener('click', function(){
+    divideEvent();
+});
+
+
+function plusEvent(){
     if (currentOperator === ''){
         displayValue = operate('+', Number(previous), Number(current));
     }
@@ -51,9 +70,9 @@ plusBtn.addEventListener('click', function(){
     previous = displayValue;
     current = '';
     display.textContent = displayValue;
-});
+}
 
-minusBtn.addEventListener('click', function(){
+function subtractEvent(){
     if (currentOperator === ''){
         displayValue = operate('-', Number(current), Number(previous));
     }
@@ -64,9 +83,9 @@ minusBtn.addEventListener('click', function(){
     previous = displayValue;
     current = '';
     display.textContent = displayValue;
-});
+}
 
-timesBtn.addEventListener('click', function(){
+function multiplyEvent(){
     if (currentOperator === ''){
         displayValue = operate('*', 1, Number(current));
     }
@@ -77,9 +96,9 @@ timesBtn.addEventListener('click', function(){
     previous = displayValue;
     current = '';
     display.textContent = displayValue;
-});
+}
 
-divideBtn.addEventListener('click', function(){
+function divideEvent(){
     if (currentOperator === ''){
         displayValue = operate('/', Number(current), Number(1));
     }
@@ -90,41 +109,122 @@ divideBtn.addEventListener('click', function(){
     previous = displayValue;
     current = '';
     display.textContent = displayValue;
-});
+}
 //End Math Operators
 //*************************************************** */
+
+//Keyboard support
+//****************************************************/
+document.addEventListener('keyup', (e) => {
+    if (e.key === '+'){ plusEvent(); }
+    else if (e.code === 'Minus'){ subtractEvent(); }
+    else if (e.code === 'Slash'){ divideEvent(); }
+    else if (e.code === "KeyX" || e.key === '*'){ multiplyEvent(); }
+    else if (e.code === 'Digit0')
+    {
+        current += '0';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit1')
+    {
+        current += '1';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit2')
+    {
+        current += '2';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit3')
+    {
+        current += '3';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit4')
+    {
+        current += '4';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit5')
+    {
+        current += '5';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit6')
+    {
+        current += '6';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit7')
+    {
+        current += '7';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit8')
+    {
+        current += '8';
+        display.textContent = current;
+    }
+    else if (e.code === 'Digit9')
+    {
+        current += '9';
+        display.textContent = current;
+    }
+    else if (e.code === 'Escape'){ clearEvent(); }
+    else if (e.code === 'Period'){ decimalEvent(); }
+    else if (e.code === 'Backspace'){ deleteKeyEvent(); }
+    else if (e.code === 'Enter'){ equalsKeyEvent(); }
+});
+//End keyboard support
+//********************************************************/
 
 //Utility Operators
 //******************************************************* */
 clearBtn.addEventListener('click', function(){
+    clearEvent();
+});
+
+equalsBtn.addEventListener('click', function(){
+    equalsKeyEvent();
+})
+
+deleteBtn.addEventListener('click', function(){
+    deleteKeyEvent();
+});
+
+decimalBtn.addEventListener('click', function(){
+   decimalEvent();
+});
+
+function clearEvent(){
     current = '';
     previous = '';
     displayValue = '';
     currentOperator = '';
     display.textContent = displayValue;
-});
+}
 
-equalsBtn.addEventListener('click', function(){
+function equalsKeyEvent(){
     if (currentOperator && previous && current)
     {
         displayValue = operate(currentOperator, Number(previous), Number(current));
         display.textContent = displayValue;
     }
-})
+}
 
-deleteBtn.addEventListener('click', function(){
+function deleteKeyEvent()
+{
     current = current.slice(0, current.length-1);
     display.textContent = current;
-});
+}
 
-decimalBtn.addEventListener('click', function(){
+function decimalEvent() {
     if (decimalFlag === false){
         decimalFlag = true;
         current += '.';
         display.textContent = current;
     }
-   
-});
+}
 //End of utility Operators
 //******************************************************* */
 
@@ -134,18 +234,28 @@ decimalBtn.addEventListener('click', function(){
 function operate(operator, a, b) {
     //reset decimal flag to accept new input
     decimalFlag = false;
-    
+    if (a.toString().length > 18 || b.toString().length > 18)
+    {
+        
+        return "Error: Overflow"; 
+    }
+
+    //round answers to limit overflow of decimals
     if (operator === '+'){
-        return add(a,b);
+        return Math.round((add(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
+        //return add(a,b);
     }
     else  if (operator === '-'){
-        return subtract(a,b);
+        //return subtract(a,b);
+        return Math.round((subtract(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
     }
     else  if (operator === '*'){
-        return multiply(a,b);
+        //return multiply(a,b);
+        return Math.round((multiply(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
     }
     else  if (operator === '/'){
-        return divide(a,b);
+        //return divide(a,b);
+        return Math.round((divide(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
     }
     else {
         return "Error. Invalid operator.";
@@ -153,6 +263,7 @@ function operate(operator, a, b) {
     
 }
 
+//Math operation helper functions
 function add (a, b) {
     return a + b;
 }
