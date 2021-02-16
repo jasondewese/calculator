@@ -1,6 +1,6 @@
 /*just to confirm file is properly linked*/
 body {
-    background-color: #DDD;
+    background-color: #222;
     font-size: 48px;
     display: flex;
     justify-content: center;
@@ -8,7 +8,7 @@ body {
 }
 
 #calcBody {
-    background-color: #CCF;
+    background-color: #D0D0D0;
     height: 10em;
     width: 10em;
     
@@ -30,20 +30,38 @@ body {
     border-color: black;
     border-radius: 10px;
     border-width: 3px;
-
     padding: 0.5em;
+    
 }
 
 .buttons {
+    color: #FFF;
     font-size: 48px;
     border-style: solid;
     border-color: black;
     border-radius: 10px;
     border-width: 2px;
+    background-color: #EEE;
+    width: 2.25em;
+    height: 1.5em;
+    background-color: #777;
+}
+
+.numberBtn {
+    background-color: #222;
+}
+
+#clearBtn, #deleteBtn {
+    width: 4.75em;
+    background-color: #8F0000;
+}
+
+#clearBtn:hover, #deleteBtn:hover {
+    background-color: #D00000;
 }
 
 .buttons:hover {
-    background-color: #DDD;
+    background-color: #999;
 }
 
 #display {
@@ -77,7 +95,11 @@ body {
 
 /*fix links to bottom*/
 footer {
+    display: flex;
+    width: 86vw;
+    justify-content: space-between;
     position: fixed;
     font-size: 18px;
     bottom: 0;
+    color: #FFF;
 }
