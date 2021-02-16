@@ -18,30 +18,31 @@ const equalsBtn = document.querySelector('#equalsBtn');
 const numberBtns = document.querySelectorAll('.numberBtn');
 const display = document.querySelector('#display');
 
-//variables to store user inputs
+//variables to store user inputs, operator, and display value
 let current = '';
 let previous = '';
 let currentOperator = '';
-
-//used in rounding function
-const LIMIT_5_DECIMALS = 100000;
-
-//Value to show on screen
 let displayValue = '';
 
-//only allow one decimal at a time
+//rounding and overflow protection
+const LIMIT_5_DECIMALS = 100000;
+const MAX_DIGITS = 16;
+
+//only allow one decimal point per number input
 let decimalFlag = false;
 
-//give all number buttons an onEvent to add value to currentOperand
+//give all number buttons an onEvent to add value to current
 for (let i = 0; i < numberBtns.length; i++){
     numberBtns[i].addEventListener('click', function(){
-        current += numberBtns[i].textContent;
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += numberBtns[i].textContent;
+            display.textContent = current;
+        }
     });
 }
 
 //Math Operation event handlers
-//******************************************************** */
+//************************************************************** */
 plusBtn.addEventListener('click', function(){
    plusEvent();
 });
@@ -110,11 +111,11 @@ function divideEvent(){
     current = '';
     display.textContent = displayValue;
 }
-//End Math Operators
-//*************************************************** */
+//End Math Event Operators
+//************************************************************** */
 
 //Keyboard support
-//****************************************************/
+//************************************************************** */
 document.addEventListener('keyup', (e) => {
     if (e.key === '+'){ plusEvent(); }
     else if (e.code === 'Minus'){ subtractEvent(); }
@@ -122,64 +123,84 @@ document.addEventListener('keyup', (e) => {
     else if (e.code === "KeyX" || e.key === '*'){ multiplyEvent(); }
     else if (e.code === 'Digit0')
     {
-        current += '0';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '0';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit1')
     {
-        current += '1';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '1';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit2')
     {
-        current += '2';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '2';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit3')
     {
-        current += '3';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '3';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit4')
     {
-        current += '4';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '4';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit5')
     {
-        current += '5';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '5';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit6')
     {
-        current += '6';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '6';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit7')
     {
-        current += '7';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '7';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit8')
     {
-        current += '8';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '8';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Digit9')
     {
-        current += '9';
-        display.textContent = current;
+        if (current.length < MAX_DIGITS) {
+            current += '9';
+            display.textContent = current;
+        }
     }
     else if (e.code === 'Escape'){ clearEvent(); }
     else if (e.code === 'Period'){ decimalEvent(); }
     else if (e.code === 'Backspace'){ deleteKeyEvent(); }
-    else if (e.code === 'Enter'){ equalsKeyEvent(); }
+    else if (e.code === 'Enter' || e.code === 'Equal'){ equalsKeyEvent(); }
 });
 //End keyboard support
-//********************************************************/
+//************************************************************** */
 
 //Utility Operators
-//******************************************************* */
+//************************************************************** */
 clearBtn.addEventListener('click', function(){
     clearEvent();
 });
@@ -226,7 +247,7 @@ function decimalEvent() {
     }
 }
 //End of utility Operators
-//******************************************************* */
+//************************************************************** */
 
 //Return result of mathemathical operation
 //operator {string} - can handle '+', '-', '*', or '/'. Input from user button click
@@ -234,28 +255,45 @@ function decimalEvent() {
 function operate(operator, a, b) {
     //reset decimal flag to accept new input
     decimalFlag = false;
-    if (a.toString().length > 18 || b.toString().length > 18)
+    if (a.toString().length > MAX_DIGITS || b.toString().length > MAX_DIGITS)
     {
-        
         return "Error: Overflow"; 
     }
 
     //round answers to limit overflow of decimals
     if (operator === '+'){
+        const result = add(a,b);
+        if (result.toString().length > MAX_DIGITS)
+        {
+            return "Error: Overflow";
+        }
+        
         return Math.round((add(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
-        //return add(a,b);
+        
     }
     else  if (operator === '-'){
-        //return subtract(a,b);
+        const result = subtract(a,b);
+        if (result.toString().length > MAX_DIGITS)
+        {
+            return "Error: Overflow";
+        }
         return Math.round((subtract(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
     }
     else  if (operator === '*'){
-        //return multiply(a,b);
+        const result = multiply(a,b);
+        if (result.toString().length > MAX_DIGITS)
+        {
+            return "Error: Overflow";
+        }
         return Math.round((multiply(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
     }
     else  if (operator === '/'){
-        //return divide(a,b);
-        return Math.round((divide(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;
+        const result = Math.round((divide(a,b) + Number.EPSILON) * LIMIT_5_DECIMALS) / LIMIT_5_DECIMALS;;
+        if (result.toString().length > MAX_DIGITS)
+        {
+            return "Error: Overflow";
+        }
+        return result;
     }
     else {
         return "Error. Invalid operator.";
@@ -265,14 +303,17 @@ function operate(operator, a, b) {
 
 //Math operation helper functions
 function add (a, b) {
+    
     return a + b;
 }
 
 function subtract(a, b){
+   
     return a - b;
 }
 
 function multiply(a, b){
+    
     return a * b;
 }
 
@@ -280,5 +321,6 @@ function divide(a, b){
     if (b === 0) {
         return "Error! Cannot divide by 0.";
     }
+   
     return a / b;
 }
