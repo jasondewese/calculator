@@ -1,4 +1,83 @@
 /*just to confirm file is properly linked*/
 body {
     background-color: #DDD;
+    font-size: 48px;
+    display: flex;
+    justify-content: center;
+
+}
+
+#calcBody {
+    background-color: #CCF;
+    height: 10em;
+    width: 10em;
+    
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: 
+    "display display display display"
+    "clear clear delete delete"
+    "seven eight nine divide"
+    "four five six mult"
+    "one two three minus"
+    "dec zeroArea equals plus";
+
+    row-gap: 10px;
+    column-gap: 10px;
+    margin-top: 1em;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    border-width: 3px;
+
+    padding: 0.5em;
+}
+
+.buttons {
+    font-size: 48px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    border-width: 2px;
+}
+
+.buttons:hover {
+    background-color: #DDD;
+}
+
+#display {
+    grid-area: display;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    border-width: 3px;
+    background-color: #EEE;
+}
+
+/*Place all of the buttons in the grid*/
+#clearBtn { grid-area: clear; }
+#deleteBtn { grid-area: delete; }
+#btn7 { grid-area: seven; }
+#btn8 { grid-area: eight; }
+#btn9 { grid-area: nine; }
+#divideBtn { grid-area: divide; }
+#btn4 { grid-area: four; }
+#btn5 { grid-area: five; }
+#btn6 { grid-area: six; }
+#timesBtn { grid-area: mult; }
+#btn1 { grid-area: one; }
+#btn2 { grid-area: two; }
+#btn3 { grid-area: three; }
+#minusBtn { grid-area: minus; }
+#decBtn { grid-area: dec; }
+#btn0 { grid-area: zeroArea; }
+#equalsBtn { grid-area: equals; }
+#plusBtn { grid-area: plus; }
+
+/*fix links to bottom*/
+footer {
+    position: fixed;
+    font-size: 18px;
+    bottom: 0;
 }
