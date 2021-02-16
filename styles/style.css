@@ -103,3 +103,35 @@ footer {
     bottom: 0;
     color: #FFF;
 }
+
+@media (max-width: 480px) {
+   body {
+    font-size: 28px;
+   }
+   
+    #calcBody {
+        height: 10em;
+        width: 10em;
+    }
+
+    
+    .buttons {
+        font-size: 24px;
+    }
+}
+
+@media (max-height: 480px) {
+    body {
+     font-size: 28px;
+    }
+    
+     #calcBody {
+         height: 10em;
+         width: 10em;
+     }
+ 
+     
+     .buttons {
+         font-size: 24px;
+     }
+ }
